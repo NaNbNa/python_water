@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>首页</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/styles/main.css" />
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- 模态框--修改数据项 需要放在前面才会显示-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">修改信息</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-container">
+            <h3>修改信息</h3>
+            <form id="editForm" action="/update" method="post">
+                <table class="table">
+                    <tr>
+                        <th>测站名称:</th>
+                        <td><input name="Sname" type="text" id="modalSname"></td>
+                    </tr>
+                    <tr>
+                        <th>测站编码:</th>
+                        <td><input name="Scode" type="text" id="modalScode" readonly="readonly"></td>
+                    </tr>
+                    <tr>
+                        <th>测站类型</th>
+                        <td><input name="Stype" type="text" id="modalStype"></td>
+                    </tr>
+                    <tr>
+                        <th>测站所属单位</th>
+                        <td><input name="Department" type="text" id="modalDepartment"></td>
+                    </tr>
+                    <tr>
+                        <th>河流</th>
+                        <td><input name="River" type="text" id="modalRiver"></td>
+                    </tr>
+                    <tr>
+                        <th>地址</th>
+                        <td><input name="address" type="text" id="modalAddress"></td>
+                    </tr>
+                    <tr>
+                        <th>经度</th>
+                        <td><input name="el" type="number" id="modalEl"></td>
+                    </tr>
+                    <tr>
+                        <th>纬度</th>
+                        <td><input name="nl" type="number" id="modalNl"></td>
+                    </tr>
+                    <tr>
+                        <th>建站年月</th>
+                        <td><input name="Time" type="date" id="modalTime"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="d-flex justify-content-center">
+                                <input type="submit" value="修改" class="btn btn-primary mx-2">
+                                <input type="reset" value="重置" class="btn btn-secondary mx-2">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 模态框 结束 -->
+
+<!-- 模态框--添加表字段 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">添加字段</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-container">
+            <form id="addForm" action="/addField" method="post">
+                <table class="table">
+                    <tr>
+                        <th>字段名称:</th>
+                        <td><input name="fieldName" type="text" id="fieldName" required></td>
+                    </tr>
+                    <tr>
+                        <th>字段类型:</th>
+                        <td>
+                            <select name="fieldType" id="fieldType" required>
+                                <option value="var">var</option>
+                                <option value="num">num</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>是否为空:</th>
+                        <td><input name="isNull" type="checkbox" id="isNull"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary mx-2">提交</button>
+                                <button type="reset" class="btn btn-secondary mx-2">重置</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 模态框 结束 -->
+
+<!-- 模态框--修改表字段 -->
+<div class="modal fade" id="editFieldModal" tabindex="-1" role="dialog" aria-labelledby="editFieldModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editFieldModalLabel">修改字段</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editFieldForm">
+          <div class="form-group">
+            <label for="oldFieldName">旧字段名称</label>
+            <input type="text" class="form-control" id="oldFieldName" name="oldFieldName" required>
+          </div>
+          <div class="form-group">
+            <label for="newFieldName">新字段名称</label>
+            <input type="text" class="form-control" id="newFieldName" name="newFieldName" required>
+          </div>
+          <div class="form-group">
+            <label for="newFieldType">新字段类型</label>
+            <select class="form-control" id="newFieldType" name="newFieldType">
+              <option value="var">var</option>
+              <option value="num">num</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newIsNull">是否为空</label>
+            <input type="checkbox" id="newIsNull" name="newIsNull">
+          </div>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 模态框 结束 -->
+
+<!-- 模态框--删除表字段 -->
+<div class="modal fade" id="deleteFieldModal" tabindex="-1" role="dialog" aria-labelledby="deleteFieldModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteFieldModalLabel">删除字段</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="deleteFieldForm">
+          <div class="form-group">
+            <label for="deleteFieldName">字段名称</label>
+            <input type="text" class="form-control" id="deleteFieldName" name="deleteFieldName" required>
+          </div>
+          <button type="submit" class="btn btn-danger">删除</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 模态框 结束 -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark flex-column align-items-start">
+    <a class="navbar-brand" href="#">三峡水库测站信息系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="addTab('用户管理', 'user_manage.html')">用户管理</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    字典管理
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#" onclick="addTab('河流基础信息表', 'river_info.jsp')">河流基础信息表</a>
+                    <a class="dropdown-item" href="#" onclick="addTab('地理位置表', 'location_info.jsp')">地理位置表</a>
+                    <!-- 添加更多子菜单项 -->
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="addTab('日志管理', 'log_manage.jsp')">日志管理</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="content">
+    <ul class="nav nav-tabs" id="tabList">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">测站信息</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="tabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="sticky-header">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="Scode" placeholder="请输入测站编码">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="Sname" placeholder="请输入测站名">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="Stype" placeholder="请输入测站类型">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="Department" placeholder="请输入所属单位">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="River" placeholder="请输入测站所测河流">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="date" class="form-control" id="Time" placeholder="请输入建站时间">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" onclick="searchStations()">查找测站</button>
+                </div>
+            </div>
+            <div class="main-content">
+               <h2 style="font-size: 1.5vw; text-align: center; color: #343a40; font-weight: bold; background-color: #f8f9fa; position: relative;">
+                    三峡水库测站信息
+                    <div style="position: absolute; right: 20px; top: 10px;">
+                        <span style="font-size: 1rem; margin-right: 10px;">字段操作:</span>
+                        <button id="btn1" class="btn btn-primary btn-custom" style="margin-right: 5px;" data-toggle="modal" data-target="#addModal">添加</button>
+                        <button id="btn2" class="btn btn-secondary btn-custom" style="margin-right: 5px;">修改</button>
+                        <button id="btn3" class="btn btn-danger btn-custom">删除</button>
+                    </div>
+               </h2>
+
+
+                 <div class="card-body">
+                    <div class="table-wrapper">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>测站编码</th>
+                                    <th>测站名称</th>
+                                    <th>测站类型</th>
+                                    <th>测站所属单位</th>
+                                    <th>河流</th>
+                                    <th>建站时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                                <!-- 数据行会在加载时由脚本填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../static/scripts/addTab.js"></script>
+<script type="text/javascript" src="../static/scripts/main.js"></script>
+</body>
+</html>

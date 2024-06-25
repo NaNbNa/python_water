@@ -1,0 +1,105 @@
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+    .navbar {
+        background-color: #333;
+        width: 15%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+    .navbar-nav .nav-link {
+        color: white;
+    }
+    .navbar-nav .nav-link:hover {
+        background-color: #575757;
+    }
+    .navbar-dark .navbar-brand {
+    flex-direction: column; /* 确保菜单项垂直排列 */
+    align-items: flex-start; /* 确保菜单项从顶部开始对齐 */
+    font-size: 1.3vw; /* 使用视口宽度单位调整标题文字大小 */
+    margin-bottom: 1rem;
+    white-space: nowrap; /* 防止标题文字换行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+    .collapse.navbar-collapse {
+    display: flex;
+    flex-direction: column; /* 确保菜单项垂直排列 */
+    align-items: flex-start; /* 确保菜单项从顶部开始对齐 */
+    height: 100%; /* 占满整个导航栏高度 */
+}
+
+    .navbar-dark .navbar-nav .nav-item {
+        margin-bottom: 1rem;
+    }
+    
+    .navbar-dark .navbar-nav .nav-link {
+        font-size: 1.5vw; /* 使用视口宽度单位调整菜单项文字大小 */
+    }
+        .btn-custom {
+        font-size: 1vw;
+        padding: 0.2em 0.6em; /* 根据需要调整内边距 */
+    }
+
+    .content {
+        margin-left: 15%;
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        z-index: 1000;
+    }
+    .main-content {
+        padding: 20px;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .tab-content {
+        margin-top: 20px;
+    }
+    .table-wrapper {        /* 自定义滚动带 */
+    display: block;
+    max-height: 500px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    }
+    .table-wrapper thead th {   /* 自定义滚动带 */
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        color: #fff;
+        z-index: 1;
+    }
+
