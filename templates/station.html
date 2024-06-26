@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>流域代码表</title>
+    <title>测站基本信息表</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -13,27 +13,33 @@
     <div class="content">
         <ul class="nav nav-tabs" id="tabList">
             <li class="nav-item">
-                <a class="nav-link active" id="basin-tab" data-toggle="tab" href="#basin" role="tab" aria-controls="basin" aria-selected="true">流域代码表</a>
+                <a class="nav-link active" id="station-info-tab" data-toggle="tab" href="#station-info" role="tab" aria-controls="station-info" aria-selected="true">测站基本信息表</a>
             </li>
         </ul>
         <div class="tab-content" id="tabContent">
-            <div class="tab-pane fade show active" id="basin" role="tabpanel" aria-labelledby="basin-tab">
+            <div class="tab-pane fade show active" id="station-info" role="tabpanel" aria-labelledby="station-info-tab">
                 <div class="sticky-header">
                     <div class="form-row">
                         <div class="form-group col-md-2">
-                            <input type="text" class="form-control" id="basinCode" placeholder="请输入流域编码">
+                            <input type="text" class="form-control" id="stationId" placeholder="请输入测站ID">
                         </div>
                         <div class="form-group col-md-2">
-                            <input type="text" class="form-control" id="basinName" placeholder="请输入流域名称">
+                            <input type="text" class="form-control" id="stationCode" placeholder="请输入测站编码">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <input type="text" class="form-control" id="stationName" placeholder="请输入测站名称">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <input type="date" class="form-control" id="startDate" placeholder="请输入启用日期">
                         </div>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-primary" onclick="searchBasins()">查找流域</button>
+                        <button class="btn btn-primary" onclick="searchStation()">查找测站信息</button>
                     </div>
                 </div>
                 <div class="main-content">
                     <h2 style="font-size: 1.5vw; text-align: center; color: #343a40; font-weight: bold; background-color: #f8f9fa; position: relative;">
-                        流域代码信息
+                        测站基本信息
                         <div style="position: absolute; right: 20px; top: 10px;">
                             <span style="font-size: 1rem; margin-right: 10px;">表操作:</span>
                             <button id="btn1" class="btn btn-primary btn-custom" style="margin-right: 5px;" data-toggle="modal" data-target="#addModal">添加</button>
@@ -45,16 +51,26 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>ID</th>
-                                        <th>流域编码</th>
-                                        <th>流域名称</th>
+                                        <th>测站编码</th>
+                                        <th>测站名称</th>
+                                        <th>测站类型ID</th>
+                                        <th>测站位置ID</th>
+                                        <th>流域ID</th>
+                                        <th>启用日期</th>
+                                        <th>停用日期</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
                                 <tbody id="resultsTableBody">
                                     <tr>
                                         <td>1</td>
-                                        <td>BC001</td>
-                                        <td>长江流域</td>
+                                        <td>SC001</td>
+                                        <td>测站1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2023-01-01</td>
+                                        <td>2024-01-01</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm">编辑</button>
                                             <button class="btn btn-danger btn-sm">删除</button>
@@ -62,8 +78,13 @@
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>BC002</td>
-                                        <td>黄河流域</td>
+                                        <td>SC002</td>
+                                        <td>测站2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2023-02-01</td>
+                                        <td>2024-02-01</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm">编辑</button>
                                             <button class="btn btn-danger btn-sm">删除</button>
@@ -96,12 +117,32 @@
                             <input type="text" class="form-control" id="fieldID" placeholder="ID">
                         </div>
                         <div class="form-group">
-                            <label for="fieldBasinCode">流域编码</label>
-                            <input type="text" class="form-control" id="fieldBasinCode" placeholder="流域编码">
+                            <label for="fieldStationCode">测站编码</label>
+                            <input type="text" class="form-control" id="fieldStationCode" placeholder="测站编码">
                         </div>
                         <div class="form-group">
-                            <label for="fieldBasinName">流域名称</label>
-                            <input type="text" class="form-control" id="fieldBasinName" placeholder="流域名称">
+                            <label for="fieldStationName">测站名称</label>
+                            <input type="text" class="form-control" id="fieldStationName" placeholder="测站名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="fieldTypeId">测站类型ID</label>
+                            <input type="text" class="form-control" id="fieldTypeId" placeholder="测站类型ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="fieldLocationId">测站位置ID</label>
+                            <input type="text" class="form-control" id="fieldLocationId" placeholder="测站位置ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="fieldBasinId">流域ID</label>
+                            <input type="text" class="form-control" id="fieldBasinId" placeholder="流域ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="fieldStartDate">启用日期</label>
+                            <input type="date" class="form-control" id="fieldStartDate" placeholder="启用日期">
+                        </div>
+                        <div class="form-group">
+                            <label for="fieldEndDate">停用日期</label>
+                            <input type="date" class="form-control" id="fieldEndDate" placeholder="停用日期">
                         </div>
                     </form>
                 </div>
@@ -114,9 +155,9 @@
     </div>
 
     <script>
-        function searchBasins() {
-            // 查找流域的逻辑
-            console.log("查找流域");
+        function searchStation() {
+            // 查找测站信息的逻辑
+            console.log("查找测站信息");
         }
     </script>
 </body>

@@ -11,12 +11,12 @@ stations = [
     # 更多数据行...
 ]
 
-
+# 进入首页html
 @main_routes.route('/')
 def index():
     return render_template('main.html')
 
-
+# 更新数据
 @main_routes.route('/update', methods=['POST'])
 def update():
     Scode = request.form['Scode']
@@ -33,7 +33,7 @@ def update():
             break
     return redirect(url_for('main.index'))
 
-
+# 查询功能
 @main_routes.route('/search', methods=['POST'])
 def search():
     data = request.json

@@ -4,7 +4,7 @@ from config import db_config
 
 field_routes = Blueprint('fields', __name__)
 
-
+# 表字段增删改
 @field_routes.route('/addField', methods=['POST'])
 def add_field():
     field_name = request.form['fieldName']

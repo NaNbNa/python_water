@@ -28,27 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('添加按钮被点击');
         //alert('添加按钮被点击');
     });
-    document.getElementById('btn2').addEventListener('click', function () {
-        console.log('修改按钮被点击');
-        $('#editFieldModal').modal('show');
-    });
-
-    document.getElementById('btn3').addEventListener('click', function () {
-        console.log('删除按钮被点击');
-        $('#deleteFieldModal').modal('show');
-    });
     /*表字段按钮增删改响应事件----*/
 
     /*查询数据项*/
     document.querySelector('.btn-primary').addEventListener('click', function () {
         searchStations();
     });
-    document.getElementById('btn1').addEventListener('click', function () {
-        console.log('添加按钮被点击');
-        // No alert needed as we are opening a modal
-    });
 
-    /*添加表字段*/
+    /*添加表数据*/
     document.getElementById('addForm').addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(this);
@@ -74,61 +61,74 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('字段添加失败');
         });
     });
-
-    /*修改表字段*/
-    document.getElementById('editFieldForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-
-        fetch('/editField', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('字段修改成功');
-                $('#editFieldModal').modal('hide');
-                // 更新界面或执行其他操作
-            } else {
-                alert('字段修改失败: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('字段修改失败');
-        });
-    });
-
-    /*删除表字段*/
-    document.getElementById('deleteFieldForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-
-        fetch('/deleteField', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('字段删除成功');
-                $('#deleteFieldModal').modal('hide');
-                // 更新界面或执行其他操作
-            } else {
-                alert('字段删除失败: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('字段删除失败');
-        });
 });
 
 });
 
+/*fetchData函数通过AJAX请求从后端API获取测站数据，并将其渲染到表格中*/
+$(document).ready(function() {
+            function fetchData() {
+                $.ajax({
+                    url: '/api/station-data',
+                    method: 'GET',
+                    success: function(data) {
+                        var tableBody = $('#resultsTableBody');
+                        tableBody.empty();
+                        data.forEach(function(item, index) {
+                            var row = $('<tr>');
+                            row.append($('<td>').text(index + 1));
+                            row.append($('<td>').text(item.station_code));
+                            row.append($('<td>').text(item.station_name));
+                            row.append($('<td>').text(item.station_type));
+                            row.append($('<td>').text(item.department));
+                            row.append($('<td>').text(item.river));
+                            row.append($('<td>').text(item.time));
+                            var actionCell = $('<td>');
+                            actionCell.append($('<button>').addClass('btn btn-warning btn-sm').text('编辑').on('click', function() {
+                                // 编辑按钮点击事件
+                                editStation(item);
+                            }));
+                            actionCell.append($('<button>').addClass('btn btn-danger btn-sm').text('删除').on('click', function() {
+                                // 删除按钮点击事件
+                                deleteStation(item.id);
+                            }));
+                            row.append(actionCell);
+                            tableBody.append(row);
+                        });
+                    }
+                });
+            }
 
-/*显示数据项*/
+            function searchStations() {
+                // 查找测站信息的逻辑
+                console.log("查找测站信息");
+                fetchData();
+            }
+
+            function editStation(station) {
+                // 填充模态框数据
+                $('#modalSname').val(station.station_name);
+                $('#modalScode').val(station.station_code);
+                $('#modalStype').val(station.station_type);
+                $('#modalDepartment').val(station.department);
+                $('#modalRiver').val(station.river);
+                $('#modalAddress').val(station.address);
+                $('#modalEl').val(station.el);
+                $('#modalNl').val(station.nl);
+                $('#modalTime').val(station.time);
+                $('#editModal').modal('show');
+            }
+
+            function deleteStation(id) {
+                // 删除测站信息的逻辑
+                console.log("删除测站ID: " + id);
+                // 调用API删除操作
+            }
+
+            fetchData(); // 页面加载时获取数据
+});
+
+/*测站信息表-显示数据项*/
 function addDataRow(data) {
     const resultsTableBody = document.getElementById('resultsTableBody');
 
@@ -162,6 +162,7 @@ function openEditModal(Scode, Sname, Stype, Department, River, BuildTime, Addres
 
     $('#editModal').modal('show');
 }
+
 /*查询数据项*/
 function searchStations() {
     // 显示加载指示器
