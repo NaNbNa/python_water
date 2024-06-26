@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日志管理</title>
+    <title>沿革信息表</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -13,33 +13,30 @@
     <div class="content">
         <ul class="nav nav-tabs" id="tabList">
             <li class="nav-item">
-                <a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">日志管理</a>
+                <a class="nav-link active" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">沿革信息表</a>
             </li>
         </ul>
         <div class="tab-content" id="tabContent">
-            <div class="tab-pane fade show active" id="log" role="tabpanel" aria-labelledby="log-tab">
+            <div class="tab-pane fade show active" id="history" role="tabpanel" aria-labelledby="history-tab">
                 <div class="sticky-header">
                     <div class="form-row">
                         <div class="form-group col-md-2">
-                            <input type="text" class="form-control" id="userName" placeholder="请输入用户名">
+                            <input type="text" class="form-control" id="stationId" placeholder="请输入测站ID">
                         </div>
                         <div class="form-group col-md-2">
-                            <input type="date" class="form-control" id="startDate" placeholder="起始日期">
+                            <input type="date" class="form-control" id="changeDate" placeholder="请输入变更日期">
                         </div>
                         <div class="form-group col-md-2">
-                            <input type="date" class="form-control" id="endDate" placeholder="结束日期">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" id="sqlQuery" placeholder="请输入SQL语句">
+                            <input type="text" class="form-control" id="changeDescription" placeholder="请输入变更描述">
                         </div>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-primary" onclick="searchLogs()">查找日志</button>
+                        <button class="btn btn-primary" onclick="searchHistory()">查找沿革信息</button>
                     </div>
                 </div>
                 <div class="main-content">
                     <h2 style="font-size: 1.5vw; text-align: center; color: #343a40; font-weight: bold; background-color: #f8f9fa; position: relative;">
-                        日志信息
+                        沿革信息
                         <div style="position: absolute; right: 20px; top: 10px;">
                             <span style="font-size: 1rem; margin-right: 10px;">字段操作:</span>
                             <button id="btn1" class="btn btn-primary btn-custom" style="margin-right: 5px;" data-toggle="modal" data-target="#addModal">添加</button>
@@ -53,20 +50,18 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>ID</th>
-                                        <th>用户名</th>
-                                        <th>操作时间</th>
-                                        <th>操作类型</th>
-                                        <th>SQL语句</th>
+                                        <th>测站ID</th>
+                                        <th>变更日期</th>
+                                        <th>变更描述</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
                                 <tbody id="resultsTableBody">
                                     <tr>
                                         <td>1</td>
-                                        <td>张三</td>
-                                        <td>2023-06-25 14:30:00</td>
-                                        <td>INSERT</td>
-                                        <td>INSERT INTO users (name, email) VALUES ('张三', 'zhangsan@example.com')</td>
+                                        <td>101</td>
+                                        <td>2023-01-01</td>
+                                        <td>更换了设备</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm">编辑</button>
                                             <button class="btn btn-danger btn-sm">删除</button>
@@ -74,10 +69,9 @@
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>李四</td>
-                                        <td>2023-06-25 15:00:00</td>
-                                        <td>UPDATE</td>
-                                        <td>UPDATE users SET email = 'lisi@example.com' WHERE name = '李四'</td>
+                                        <td>102</td>
+                                        <td>2023-02-15</td>
+                                        <td>升级了软件</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm">编辑</button>
                                             <button class="btn btn-danger btn-sm">删除</button>
@@ -98,7 +92,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">添加日志</h5>
+                    <h5 class="modal-title" id="addModalLabel">添加字段</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -106,24 +100,20 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="logID">ID</label>
-                            <input type="text" class="form-control" id="logID" placeholder="ID">
+                            <label for="fieldID">ID</label>
+                            <input type="text" class="form-control" id="fieldID" placeholder="ID">
                         </div>
                         <div class="form-group">
-                            <label for="logUserName">用户名</label>
-                            <input type="text" class="form-control" id="logUserName" placeholder="用户名">
+                            <label for="fieldStationId">测站ID</label>
+                            <input type="text" class="form-control" id="fieldStationId" placeholder="测站ID">
                         </div>
                         <div class="form-group">
-                            <label for="logTime">操作时间</label>
-                            <input type="datetime-local" class="form-control" id="logTime" placeholder="操作时间">
+                            <label for="fieldChangeDate">变更日期</label>
+                            <input type="date" class="form-control" id="fieldChangeDate" placeholder="变更日期">
                         </div>
                         <div class="form-group">
-                            <label for="logType">操作类型</label>
-                            <input type="text" class="form-control" id="logType" placeholder="操作类型">
-                        </div>
-                        <div class="form-group">
-                            <label for="logSQL">SQL语句</label>
-                            <textarea class="form-control" id="logSQL" placeholder="SQL语句"></textarea>
+                            <label for="fieldChangeDescription">变更描述</label>
+                            <input type="text" class="form-control" id="fieldChangeDescription" placeholder="变更描述">
                         </div>
                     </form>
                 </div>
@@ -136,9 +126,9 @@
     </div>
 
     <script>
-        function searchLogs() {
-            // 查找日志的逻辑
-            console.log("查找日志");
+        function searchHistory() {
+            // 查找沿革信息的逻辑
+            console.log("查找沿革信息");
         }
     </script>
 </body>
